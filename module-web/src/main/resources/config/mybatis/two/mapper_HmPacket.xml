@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stt.db2.thirdPart">
+
+
+<select id="selectByRecordID"
+        resultType="org.stt.module.dto.ThirdPart.HmPacketDto"
+        parameterType="java.lang.Long">
+        select * from HmPacket where RecordID = #{RecordID};
+    </select>
+	
+</mapper>

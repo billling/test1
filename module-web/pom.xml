@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>module-web</artifactId>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>org.stt.module</groupId>
+		<artifactId>module-parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../module-parent/pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.stt.module</groupId>
+			<artifactId>module-intf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.stt.module</groupId>
+			<artifactId>module-service</artifactId>
+		</dependency>
+	</dependencies>
+
+	
+	<build>
+		<resources>
+            <resource>
+                <directory>src/main/resources/config/${profile.path}</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!-- <excludes>
+                    <exclude>**/res/**/*.*</exclude>
+                </excludes> -->
+            </resource>
+        </resources>
+        <finalName>module</finalName>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+			<properties>
+				<profile.path>res/dev</profile.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<profile.path>res/test</profile.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>prd</id>
+			<properties>
+				<profile.path>res/prd</profile.path>
+			</properties>
+		</profile>
+	</profiles>
+</project>

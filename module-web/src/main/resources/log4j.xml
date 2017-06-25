@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="info_log" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/dms_info.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="1GB" />
+		<param name="MaxBackupIndex" value="1000" />
+		<layout class="org.stt.module.util.log.ExPatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss SSS\} %-5p] [%T] %c{3\} - %m%n" />
+		</layout>
+		<!--set info level -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="info" />
+			<param name="levelMax" value="info" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<appender name="error_log" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/dms_error.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="1GB" />
+		<param name="MaxBackupIndex" value="1000" />
+		<layout class="org.stt.module.util.log.ExPatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss SSS\} %-5p] [%T] %c{3\} - %m%n" />
+		</layout>
+		<!--set error level -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="error" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Console Appender -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss SSS\} %-5p]  %c{3\} - %m%n" />
+		</layout>
+
+		<!--set output level -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="info" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!--<logger name="com.mchange"> <level value="info" /> </logger> -->
+
+	<!-- root logger -->
+	<root>
+		<priority value="info" />
+		<appender-ref ref="info_log" />
+		<appender-ref ref="error_log" />
+	</root>
+</log4j:configuration>

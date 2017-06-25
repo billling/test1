@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd 
+        http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+
+	<!-- 分成2个数据源，2套sqlSessionFactory  以及2套mapper配置 -->
+	<bean id="dataSource1" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${dbDriver1}" />
+        <property name="url" value="${dbUrl1}" />
+        <property name="username" value="${dbUsername1}" />
+        <property name="password" value="${dbPassword1}" />
+        <property name="maxActive" value="${maxActive}" />  
+        <property name="initialSize" value="${initialSize}" />  
+        <property name="maxWait" value="${maxWait}" />  
+        <property name="minIdle" value="${minIdle}" />  
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />  
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />  
+        <property name="validationQuery" value="select 1" />  
+        <property name="testWhileIdle" value="${testWhileIdle}" />  
+        <property name="testOnBorrow" value="${testOnBorrow}" />  
+        <property name="testOnReturn" value="${testOnReturn}" />  
+        <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />  
+    </bean>
+    
+    
+    <bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${dbDriver2}" />
+        <property name="url" value="${dbUrl2}" />
+        <property name="username" value="${dbUsername2}" />
+        <property name="password" value="${dbPassword2}" />
+        <property name="maxActive" value="${maxActive}" />  
+        <property name="initialSize" value="${initialSize}" />  
+        <property name="maxWait" value="${maxWait}" />  
+        <property name="minIdle" value="${minIdle}" />  
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />  
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />  
+        <property name="validationQuery" value="select 1" />  
+        <property name="testWhileIdle" value="${testWhileIdle}" />  
+        <property name="testOnBorrow" value="${testOnBorrow}" />  
+        <property name="testOnReturn" value="${testOnReturn}" />  
+        <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />  
+    </bean>
+    
+    
+
+	<bean id="sqlSessionFactory1" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource1" />
+		<property name="mapperLocations" value="classpath*:config/mybatis/one/mapper_*.xml" />
+	</bean>
+	
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource2" />
+        <property name="mapperLocations" value="classpath*:config/mybatis/two/mapper_*.xml" />
+    </bean>
+
+	<bean id="sqlSession1" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory1" />
+		<!-- <constructor-arg index="1" value="BATCH" /> 如果想要进行批量操作可加入这个属性 -->
+	</bean>
+	
+	<bean id="sqlSession2" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory2" />
+        <!-- <constructor-arg index="1" value="BATCH" /> 如果想要进行批量操作可加入这个属性 -->
+    </bean>
+
+	<!-- 声明事务管理器 -->
+	<bean id="txManager1"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource1" />
+	</bean>
+	
+	<bean id="txManager2"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource2" />
+    </bean>
+	<!-- 采用@Transactional注解方式使用事务 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+</beans>

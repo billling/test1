@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>图片验证码测试</title>
+<script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+</head>
+<body>
+	<table>
+
+		<tr>
+			<td><input id="inputCode" type="text"/></td>
+			<td><button id="checkPersonalButton">验证个人账号</button></td>
+			<td><button id="checkCompanyButton">验证公司账号</button></td>
+		</tr>
+
+		<tr>
+			<td><span id="checkResult1"></span></td>
+	        <td><span id="checkResult2"></span></td>
+		</tr>
+	</table>
+
+<script type="text/javascript">
+var captchaId;
+$(document).ready(function() {
+	  $("#checkPersonalButton").click(function(){
+		  phoneAjax(); 
+		});
+	  
+	  $("#checkCompanyButton").click(function(){
+		  emailAjax(); 
+		});
+});	
+
+$(function() {
+	$("#inputCode").val("");
+});
+				
+function phoneAjax() {
+	var username =  $("#inputCode").val();
+	var jsonParms = {"username":username, "type":"1"};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	//alert(encodeData);
+	$.ajax({
+		type : "GET",
+		url : "../../V1/console/users/username",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult1").text(jsonData.message);
+			$("#checkResult2").text(jsonData.result.username);
+			}
+	});
+	  
+}
+
+function emailAjax() {
+	var username =  $("#inputCode").val();
+	var jsonParms = {"username":username, "type":"2"};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	//alert(encodeData);
+	$.ajax({
+		type : "GET",
+		url : "../../V1/console/users/username",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult1").text(jsonData.message);
+			$("#checkResult2").text(jsonData.result.username);
+			}
+	});
+	  
+}
+</script>
+</body>
+</html>

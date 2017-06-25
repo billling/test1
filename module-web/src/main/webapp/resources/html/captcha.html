@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>图片验证码测试</title>
+<script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+</head>
+<body>
+	<table>
+
+		<tr>
+			<td><span>请输入验证码：</span></td>
+			<td><input id="inputCode" type="text" style="width: 100px; height: 20px" /></td>
+			<td><img id="captchaImage" width="80" height="30" /></td>
+			<td><button id="getCaptchaButton">换一张</button></td>
+		</tr>
+
+		<tr>
+			<td><button id="checkCaptchaButton">验证验证码</button></td>
+			<td><span id="checkResult1"></span></td>
+			<td><span id="checkResult2"></span></td>
+		</tr>
+	</table>
+
+<script type="text/javascript">
+var captchaId;
+$(document).ready(function() {
+	  $("#getCaptchaButton").click(function(){
+		  $("#inputCode").val("");
+		  captchaAjax(); 
+		});
+	  
+	  $("#checkCaptchaButton").click(function(){	  
+		  checkCaptchaAjax(); 
+		});
+});	
+
+$(function() {
+	$("#inputCode").val("");
+	captchaAjax(); 
+});
+				
+function captchaAjax() {
+	$.ajax({
+		type : "POST",
+		url : "../../V1/console/captcha",
+		data : {},
+		dataType : "text",
+		success : function(data) {
+			//var decodeData = utf8to16(base64decode(data));
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#captchaImage").attr("src","data:image/jpeg;base64,"+ jsonData.result.imageBase64);
+			captchaId = jsonData.result.captchaId;
+			}
+	});
+	  
+}
+
+function checkCaptchaAjax() {
+	var captchaCode = $("#inputCode").val();
+	var jsonParms = {"captchaCode":captchaCode, "captchaId":captchaId};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	$.ajax({
+		type : "GET",
+		url : "../../V1/console/captcha",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult1").text(jsonData.status);
+			$("#checkResult2").text(jsonData.result.captchaCode);
+			}
+	});
+	  
+}
+</script>
+</body>
+</html>

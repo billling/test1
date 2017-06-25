@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="E:\CMCC-DP\Maven\Repository\org\postgresql\postgresql\9.3-1103-jdbc41\postgresql-9.3-1103-jdbc41.jar" />
+	<context id="context1">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" /><!-- 是否取消注释 -->
+			<property name="suppressDate" value="false" /> <!-- 是否生成注释代时间戳 -->
+		</commentGenerator>
+		<jdbcConnection driverClass="org.postgresql.Driver"
+			connectionURL="jdbc:postgresql://10.133.12.133:5432/oegw2.0" userId="postgres"
+			password="12345678" />
+		<javaModelGenerator targetPackage="auto.dto"
+			targetProject="itsa-web\src\main\java" />
+		<sqlMapGenerator targetPackage="auto.xml"
+			targetProject="itsa-web\src\main\java" />
+		<javaClientGenerator targetPackage="auto.dao"
+			targetProject="itsa-web\src\main\java" type="XMLMAPPER" />
+
+		<table domainObjectName="PartnerUsergroupInfoDto" tableName="partner_usergroup_info"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+	
+	</context>
+</generatorConfiguration>

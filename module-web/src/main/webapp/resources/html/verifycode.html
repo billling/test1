@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>图片验证码测试</title>
+<script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+</head>
+<body>
+	<table>
+
+		<tr>
+			<td><button id="sendEmailVerifyCodeButton">邮箱验证码</button></td>
+			<td><button id="sendPhoneVerifyCodeButton">短信验证码</button></td>
+			<td><input id="inputCode" type="text"/></td>
+		</tr>
+
+		<tr>
+			<td><button id="checkVerifyCodeButton">验证验证码</button></td>
+			<td><span id="checkResult"></span></td>
+			<td><span id="checkResult1"></span></td>
+		</tr>
+	</table>
+
+<script type="text/javascript">
+var captchaId;
+$(document).ready(function() {
+	  $("#sendEmailVerifyCodeButton").click(function(){
+		  emailAjax(); 
+		});
+	  
+	  $("#sendPhoneVerifyCodeButton").click(function(){
+		  phoneAjax(); 
+		});
+	  
+	  $("#checkVerifyCodeButton").click(function(){	  
+		  checkAjax(); 
+		});
+});	
+
+$(function() {
+	$("#inputCode").val("");
+});
+				
+function emailAjax() {
+	var jsonParms = {"username":"you", "sendType":"0"};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	//alert(encodeData);
+	$.ajax({
+		type : "POST",
+		url : "../../V1/console/verifyCodes",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult").text(jsonData.userStatus);
+			}
+	});
+	  
+}
+
+function phoneAjax() {
+	var jsonParms = {"username":"you", "sendType":"1"};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	//alert(encodeData);
+	$.ajax({
+		type : "POST",
+		url : "../../V1/console/verifyCodes",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult").text(jsonData.userStatus);
+			}
+	});
+	  
+}
+function checkAjax() {
+	var verifyCode = $("#inputCode").val();
+	var jsonParms = {"username":"you", "verifyCode": verifyCode};
+	var stringParms = JSON.stringify(jsonParms);
+	var encodeData = encodeURIComponent(stringParms);
+	$.ajax({
+		type : "GET",
+		url : "../../V1/console/verifyCodes",
+		data : encodeData,
+		dataType : "text",
+		success : function(data) {
+			var decodeData = decodeURIComponent(data);
+			var jsonData=eval('('+decodeData+')'); 
+			$("#checkResult").text(jsonData.userStatus);
+			$("#checkResult1").text(jsonData.status);
+		}
+	});
+	  
+}
+</script>
+</body>
+</html>
